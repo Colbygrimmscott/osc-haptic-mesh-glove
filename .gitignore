@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# PlatformIO
+.pio/
+.clang_complete
+
+# VSCode workspace configs
+.vscode/
+*.code-workspace
