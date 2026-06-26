@@ -2,6 +2,8 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
+#include "config.h"
+
 // Initial setup when turned on
 void setup() {
     Wire.begin();
@@ -10,6 +12,7 @@ void setup() {
     Serial.println("16 channel PWM test");
 }
 
+// Scan for I2C devices and output through serial, returns number of devices connected.
 void scanSerialDevices(int *numDevices) {
     byte error, address, prevAddress;
     prevAddress = 0;
