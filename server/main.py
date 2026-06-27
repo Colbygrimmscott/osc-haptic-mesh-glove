@@ -5,7 +5,7 @@ from typing import List, Any
 
 import asyncio
 
-import src.config
+from src.config import *
 import test_vrc_sim
 from src.osc_handler import VRCHATOSCBridge
 from src.haptics_engine import HapticsEngine
@@ -17,8 +17,8 @@ async def main():
     loop = asyncio.get_running_loop()
 
     haptics_engine = HapticsEngine()
-    osc_bridge = VRCHATOSCBridge("127.0.0.1", 9000, 9001, haptics_engine)
-    glove_udp_sender = GloveUDPSender("192.168.4.48", 4242, haptics_engine)
+    osc_bridge = VRCHATOSCBridge(DESKTOP_IP, VR_CHAT_PORT_IN, VR_CHAT_PORT_OUT, haptics_engine)
+    glove_udp_sender = GloveUDPSender(GLOVE_IP, GLOVE_PORT, haptics_engine)
 
     await osc_bridge._start_osc_server(loop)
     await glove_udp_sender._start_udp_server(loop)
