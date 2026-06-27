@@ -3,13 +3,17 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-// Define PWM objects using I2C address
-Adafruit_PWMServoDriver pwm1 = Adafruit_PWMServoDriver(0x40);
-Adafruit_PWMServoDriver pwm2 = Adafruit_PWMServoDriver(0x41);
+// Define PWM I2C addresses
+constexpr int pwm1Address = 0x40;
+constexpr int pwm2Address = 0x41;
+
 
 // Define pinout for joystick and buttons
-extern int joyStickX = 4;
-extern int joyStickY = 5;
-extern int joyStickButton = 6;
-extern int buttonBot = 7;
-extern int buttonTop = 8;
+constexpr int joyStickX = 4;
+constexpr int joyStickY = 5;
+constexpr int joyStickButton = 6;
+constexpr int buttonBot = 7;
+constexpr int buttonTop = 8;
+
+// Define glove port for UDP connection
+constexpr int glovePort = 4242;

@@ -13,6 +13,8 @@ const char* ssid = "***REMOVED***";
 const char* wifiPassword = "***REMOVED***";
 
 WiFiUDP udp;
+Adafruit_PWMServoDriver pwm1 = Adafruit_PWMServoDriver(pwm1Address);
+//Adafruit_PWMServoDriver pwm2 = Adafruit_PWMServoDriver(pwm2Address);
 
 struct __attribute__((__packed__)) HapticMotorPacket {
     uint16_t header;
@@ -68,12 +70,11 @@ void setup() {
     int numDevices = 0;
     scanSerialDevices(&numDevices);
 
+    pwm1.begin();
+    pwm1.setPWMFreq(200);
+
     Serial.println("----------");
     delay(500);
-}
-
-void hapticMotorTest(int* incomingPacket) {
-
 }
 
 
@@ -84,7 +85,6 @@ void loop() {
 
         if (incomingPacket.header == 0x03BF) {
             Serial.println("Packet received");
-            
         }
     }
 }
