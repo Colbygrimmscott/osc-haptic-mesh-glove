@@ -4,8 +4,10 @@ from pythonosc.udp_client import SimpleUDPClient
 import asyncio
 from typing import List, Any
 
+from src.haptics_engine import HapticsEngine
+
 class VRCHATOSCBridge: 
-    def __init__(self, ip: str, port_out: int, port_in: int, haptics_engine):
+    def __init__(self, ip: str, port_out: int, port_in: int, haptics_engine: HapticsEngine):
         """
         Initializes a VRChat OSC Listening server.
 
@@ -32,14 +34,14 @@ class VRCHATOSCBridge:
         """
         Maps specific VRChat OSC parameters to functions
         """
-        self.dispatcher.map("/avatar/parameters/haptics*", self._handle_haptics)
-        #self.dispatcher.map("/avatar/parameters*", self._handle_haptics)
+        #self.dispatcher.map("/avatar/parameters/haptics*", self._handle_haptics)
+        self.dispatcher.map("/avatar/parameters*", self._handle_haptics)
 
     def _handle_haptics(self, address: str, *osc_arguments: List[Any]) -> None:
         """
         TO-DO : implement haptic engine object and add function call here
         """
-        #self.haptics_engine.X 
+        self.haptics_engine._set_values(osc_arguments)
         print("Haptic info being transmitted")
 
     def _send_joystick_data(self, x_val: float, y_val: float):
