@@ -1,16 +1,26 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
+#include <WiFi.h>
+#include <WifiUdp.h>
 
 #include "config.h"
 
-// Initial setup when turned on
-void setup() {
-    Wire.begin();
-    Serial.begin(115200);
-    while (!Serial) delay(10);
-    Serial.println("16 channel PWM test");
-}
+//const char* ssid = "ENTER_WIFI_SSID";
+//const char* wifiPassword = "ENTER_WIFI_PASSWORD";
+
+const char* ssid = "***REMOVED***";
+const char* wifiPassword = "***REMOVED***";
+
+WiFiUDP udp;
+
+struct __attribute__((__packed__)) HapticMotorPacket {
+    uint16_t header;
+    uint8_t motorPwmVals[30];
+};
+
+HapticMotorPacket incomingPacket;
+
 
 // Scan for I2C devices and output through serial, returns number of devices connected.
 void scanSerialDevices(int *numDevices) {
@@ -37,11 +47,44 @@ void scanSerialDevices(int *numDevices) {
 }
 
 
+// Initial setup when turned on
+void setup() {
+    Wire.begin();
+    Serial.begin(115200);
 
-void loop() {
+    delay(100);
+
+    WiFi.begin(ssid, wifiPassword);
+
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println("Wifi connection established on IP address: ");
+    Serial.print(WiFi.localIP());
+    udp.begin(glovePort);
+
+    Serial.println("16 channel PWM test");
     int numDevices = 0;
     scanSerialDevices(&numDevices);
 
     Serial.println("----------");
     delay(500);
+}
+
+void hapticMotorTest(int* incomingPacket) {
+
+}
+
+
+void loop() {
+    int packetSize = udp.parsePacket();
+    if (packetSize == sizeof(HapticMotorPacket)) {
+        udp.read((char*)&incomingPacket, sizeof(HapticMotorPacket));
+
+        if (incomingPacket.header == 0x03BF) {
+            Serial.println("Packet received");
+            
+        }
+    }
 }
