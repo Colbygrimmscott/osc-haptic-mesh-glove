@@ -8,15 +8,21 @@ import asyncio
 import src.config
 import test_vrc_sim
 from src.osc_handler import VRCHATOSCBridge
+from src.haptics_engine import HapticsEngine
+from src.network import GloveUDPSender
 
 
 
 async def main():
     loop = asyncio.get_running_loop()
 
-    osc_bridge = VRCHATOSCBridge("127.0.0.1", 9000, 9001, 1)
+    haptics_engine = HapticsEngine()
+    osc_bridge = VRCHATOSCBridge("127.0.0.1", 9000, 9001, haptics_engine)
+    glove_udp_sender = GloveUDPSender("192.168.4.48", 4242, haptics_engine)
 
     await osc_bridge._start_osc_server(loop)
+    await glove_udp_sender._start_udp_server(loop)
+    
 
     print()
 
