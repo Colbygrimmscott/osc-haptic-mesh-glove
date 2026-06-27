@@ -224,3 +224,6 @@ __marimo__/
 # VSCode workspace configs
 .vscode/
 *.code-workspace
+
+# Private credentials
+private.h

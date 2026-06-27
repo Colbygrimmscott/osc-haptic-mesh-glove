@@ -1,7 +1,8 @@
 #pragma once
-#include <Arduino.h>
-#include <Wire.h>
-#include <Adafruit_PWMServoDriver.h>
+
+// Define wi-fi credentials (UNCOMMENT)
+// const char* ssid = "ENTER_WIFI_SSID";
+// const char* wifiPassword = "ENTER_WIFI_PASSWORD";
 
 // Define PWM I2C addresses
 constexpr int pwm1Address = 0x40;

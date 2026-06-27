@@ -5,12 +5,8 @@
 #include <WifiUdp.h>
 
 #include "config.h"
+#include "private.h"
 
-//const char* ssid = "ENTER_WIFI_SSID";
-//const char* wifiPassword = "ENTER_WIFI_PASSWORD";
-
-const char* ssid = "***REMOVED***";
-const char* wifiPassword = "***REMOVED***";
 
 WiFiUDP udp;
 Adafruit_PWMServoDriver pwm1 = Adafruit_PWMServoDriver(pwm1Address);
