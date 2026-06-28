@@ -26,11 +26,11 @@ public:
      * Attempts to connect to Wi-Fi network when passed SSID and password credentials.
      * Establishes UDP listener when given a port number.
      */
-    void connectToWifi(char* ssid, char* wifiPassword, uint8_t glovePort);
+    void connectToWifi(const char* ssid, const char* wifiPassword, uint16_t glovePort);
 
     /**
      * Parses incoming packets and verifies the header is correct.
-     * Returns a pointer to the start of an array of motor intensities for haptic motors.
+     * Copies data for motor intensities into an array passed as input
      */
-    uint8_t* parseIncomingPacket();
+    void parseIncomingPacket(uint8_t* outputMotorIntensities, int arraySize);
 };
