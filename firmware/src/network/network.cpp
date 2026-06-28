@@ -10,7 +10,7 @@
 
 void EspUdpNetwork::connectToWifi(const char* ssid, const char* wifiPassword, uint16_t glovePort) {
     
-    WiFi.config(localIP, gateway, subnet);
+    WiFi.config(LOCAL_IP, GATEWAY, SUBNET);
 
     Serial.println("Connecting to Wifi...");
     WiFi.begin(ssid, wifiPassword);

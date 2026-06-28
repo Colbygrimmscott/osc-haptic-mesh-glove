@@ -9,8 +9,8 @@
 #include "network/network.h"
 
 
-Adafruit_PWMServoDriver pwm1 = Adafruit_PWMServoDriver(pwm1Address);
-//Adafruit_PWMServoDriver pwm2 = Adafruit_PWMServoDriver(pwm2Address);
+Adafruit_PWMServoDriver pwm1 = Adafruit_PWMServoDriver(PWM_ADDR_1);
+//Adafruit_PWMServoDriver pwm2 = Adafruit_PWMServoDriver(PWM_ADDR_2);
 
 
 EspUdpNetwork espUdpConnection;
@@ -46,7 +46,7 @@ void setup() {
     Serial.begin(115200);
     delay(5000);
 
-    espUdpConnection.connectToWifi(ssid, wifiPassword, glovePort);
+    espUdpConnection.connectToWifi(SSID, WIFI_PASS, LOCAL_PORT);
 
     Serial.println("Serial Device Scan Test:");
     int numDevices = 0;

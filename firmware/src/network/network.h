@@ -49,5 +49,5 @@ public:
      */
     void parseIncomingPacket(uint8_t* outputMotorIntensities, int arraySize);
 
-    void sendControlPacket()
+    void sendControlPacket();
 };
