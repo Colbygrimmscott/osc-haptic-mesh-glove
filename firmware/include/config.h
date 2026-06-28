@@ -1,5 +1,6 @@
 #pragma once
 #include <WiFi.h>
+#include "private.h"
 
 // Define wi-fi credentials (UNCOMMENT)
 // const char* SSID = "ENTER_WIFI_SSID";

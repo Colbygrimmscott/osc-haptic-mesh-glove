@@ -14,12 +14,12 @@ struct __attribute__((__packed__)) HapticMotorPacket {
  * Custom packet struct for sending controller data to PC server.
  */
 struct __attribute__((__packed__)) GloveControlPacket {
-    uint16_t header;                ///< Identifying header used to verify packet target.
+    uint16_t header = 0x4443;                ///< Identifying header used to verify packet target.
     uint16_t joyStickXVal;          ///< X value of joystick
     uint16_t joyStickYVal;          ///< Y value of joystick
     uint8_t joyStickButtonVal;      ///< State of joystick button
-    uint8_t buttonBotVal;           ///< State of bottom button
-    uint8_t buttonTopVal;           ///< State of top button
+    uint8_t buttonAVal;           ///< State of A button
+    uint8_t buttonBVal;           ///< State of B button
 };
 
 
@@ -32,7 +32,8 @@ private:
     HapticMotorPacket incomingPacket;   ///< Stores most recent packet.
     WiFiUDP udpConnection;              ///< Used to initialize and connect to the internet using UDP.
     int packetSize;                     ///< Stores the size of most recent packet.
-    gloveController gloveControllerObj;
+    GloveControlPacket controlOutputPacket;
+
 
 public:
 //  EspUdpNetwork();
@@ -49,5 +50,5 @@ public:
      */
     void parseIncomingPacket(uint8_t* outputMotorIntensities, int arraySize);
 
-    void sendControlPacket();
+    void sendControlPacket(gloveController gloveControlData);
 };

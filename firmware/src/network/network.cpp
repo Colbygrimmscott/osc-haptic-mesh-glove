@@ -36,3 +36,11 @@ void EspUdpNetwork::parseIncomingPacket(uint8_t* outputMotorIntensities, int arr
         }
     }
 }
+
+void EspUdpNetwork::sendControlPacket(gloveController gloveControlData) {
+    udpConnection.beginPacket(HOST_IP, REMOTE_PORT);
+    gloveControlData.getControllerVals(controlOutputPacket);
+    udpConnection.write((uint8_t*)&controlOutputPacket, sizeof(controlOutputPacket));
+    udpConnection.endPacket();
+    delay(20);
+}
