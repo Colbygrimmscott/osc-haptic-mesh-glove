@@ -6,19 +6,14 @@
 
 #include "config.h"
 #include "private.h"
+#include "network/network.h"
 
 
-WiFiUDP udp;
 Adafruit_PWMServoDriver pwm1 = Adafruit_PWMServoDriver(pwm1Address);
 //Adafruit_PWMServoDriver pwm2 = Adafruit_PWMServoDriver(pwm2Address);
 
-struct __attribute__((__packed__)) HapticMotorPacket {
-    uint16_t header;
-    uint8_t motorPwmVals[30];
-};
 
-HapticMotorPacket incomingPacket;
-
+EspUdpNetwork espUdpConnection;
 
 // Scan for I2C devices and output through serial, returns number of devices connected.
 void scanSerialDevices(int *numDevices) {
@@ -49,20 +44,11 @@ void scanSerialDevices(int *numDevices) {
 void setup() {
     Wire.begin();
     Serial.begin(115200);
+    delay(5000);
 
-    delay(100);
+    espUdpConnection.connectToWifi(ssid, wifiPassword, glovePort);
 
-    WiFi.begin(ssid, wifiPassword);
-
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-    }
-    Serial.println("Wifi connection established on IP address: ");
-    Serial.print(WiFi.localIP());
-    udp.begin(glovePort);
-
-    Serial.println("16 channel PWM test");
+    Serial.println("Serial Device Scan Test:");
     int numDevices = 0;
     scanSerialDevices(&numDevices);
 
@@ -75,12 +61,8 @@ void setup() {
 
 
 void loop() {
-    int packetSize = udp.parsePacket();
-    if (packetSize == sizeof(HapticMotorPacket)) {
-        udp.read((char*)&incomingPacket, sizeof(HapticMotorPacket));
+    uint8_t hapticMotorCount = 30;
+    uint8_t hapticMotorIntensities[hapticMotorCount];
 
-        if (incomingPacket.header == 0x03BF) {
-            Serial.println("Packet received");
-        }
-    }
+    espUdpConnection.parseIncomingPacket(hapticMotorIntensities, hapticMotorCount);
 }
