@@ -1,5 +1,8 @@
 #pragma once
-#include "network/network.h"
+//#include "network/network.h"
+
+
+struct GloveControlPacket;
 
 class gloveController {
 private:

@@ -1,6 +1,8 @@
 #pragma once
 #include <WifiUdp.h>
-#include "controller/controller.h"
+//#include "controller/controller.h"
+
+class gloveController;
 
 /**
  * Custom packet struct for deciphering incoming haptic motor control packets from PC server
@@ -50,5 +52,5 @@ public:
      */
     void parseIncomingPacket(uint8_t* outputMotorIntensities, int arraySize);
 
-    void sendControlPacket(gloveController gloveControlData);
+    void sendControlPacket(gloveController &gloveControlData);
 };

@@ -4,6 +4,7 @@
 
 #include "network.h"
 #include "config.h"
+#include "controller/controller.h"
 
 // EspUdpNetwork::EspUdpNetwork() {
 // }
@@ -32,12 +33,13 @@ void EspUdpNetwork::parseIncomingPacket(uint8_t* outputMotorIntensities, int arr
             Serial.println("Packet received");
             for (int i = 0; i < arraySize; i++) {
                 outputMotorIntensities[i] = incomingPacket.motorIntensities[i];
+                Serial.println(outputMotorIntensities[i]);
             }
         }
     }
 }
 
-void EspUdpNetwork::sendControlPacket(gloveController gloveControlData) {
+void EspUdpNetwork::sendControlPacket(gloveController &gloveControlData) {
     udpConnection.beginPacket(HOST_IP, REMOTE_PORT);
     gloveControlData.getControllerVals(controlOutputPacket);
     udpConnection.write((uint8_t*)&controlOutputPacket, sizeof(controlOutputPacket));

@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #include "controller.h"
-
+#include "network/network.h"
 
 gloveController::gloveController(uint8_t pinX, uint8_t pinY, uint8_t pinJoyBtn, uint8_t pinBtnA, uint8_t pinBtnB)
     : joyStickXPin(pinX), joyStickYPin(pinY), joyStickButtonPin(pinJoyBtn), buttonAPin(pinBtnA), buttonBPin(pinBtnB) {}
