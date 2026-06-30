@@ -11,5 +11,5 @@ class HapticsEngine:
     def _get_values(self):
         data_list = []
         for i in range(0, 30):
-            data_list.append(0.01 + i/30)
+            data_list.append(4 * i)
         return data_list

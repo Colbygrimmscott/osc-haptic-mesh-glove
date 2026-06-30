@@ -65,4 +65,13 @@ void loop() {
     uint8_t hapticMotorIntensities[hapticMotorCount];
 
     espUdpConnection.parseIncomingPacket(hapticMotorIntensities, hapticMotorCount);
+
+    uint16_t hapticMotorPWMVals[hapticMotorCount];
+
+    for (uint8_t i = 0; i < hapticMotorCount; i++) {
+        hapticMotorPWMVals[i] = map(hapticMotorIntensities[i], 0, 255, 0, 4095);
+        pwm1.setPWM(1, 0, hapticMotorPWMVals[i]);
+        delay(100);
+    }
+    delay(4000);
 }
