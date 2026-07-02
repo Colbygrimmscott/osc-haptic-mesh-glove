@@ -7,13 +7,17 @@
 #include "config.h"
 #include "private.h"
 #include "network/network.h"
+#include "controller/controller.h"
 
 
 Adafruit_PWMServoDriver pwm1 = Adafruit_PWMServoDriver(PWM_ADDR_1);
 //Adafruit_PWMServoDriver pwm2 = Adafruit_PWMServoDriver(PWM_ADDR_2);
 
+const unsigned long interval = 50;
+unsigned long prevTime = 0;
 
 EspUdpNetwork espUdpConnection;
+gloveController controllerObj = gloveController(PIN_JOYSTICK_X, PIN_JOYSTICK_Y, PIN_JOYSTICK_BTN, PIN_BTN_A, PIN_BTN_B);
 
 // Scan for I2C devices and output through serial, returns number of devices connected.
 void scanSerialDevices(int *numDevices) {
@@ -55,6 +59,8 @@ void setup() {
     pwm1.begin();
     pwm1.setPWMFreq(200);
 
+    controllerObj.initializePins();
+
     Serial.println("----------");
     delay(500);
 }
@@ -62,16 +68,31 @@ void setup() {
 
 void loop() {
     uint8_t hapticMotorCount = 30;
-    uint8_t hapticMotorIntensities[hapticMotorCount];
+    uint8_t hapticMotorIntensities[hapticMotorCount] = {0};
 
     espUdpConnection.parseIncomingPacket(hapticMotorIntensities, hapticMotorCount);
+    espUdpConnection.sendControlPacket(controllerObj);
 
     uint16_t hapticMotorPWMVals[hapticMotorCount];
 
     for (uint8_t i = 0; i < hapticMotorCount; i++) {
+        unsigned long currTime = millis();
+        while (currTime - prevTime < interval) {
+            currTime = millis();
+        }
+        prevTime = currTime;
         hapticMotorPWMVals[i] = map(hapticMotorIntensities[i], 0, 255, 0, 4095);
         pwm1.setPWM(1, 0, hapticMotorPWMVals[i]);
-        delay(100);
+        Serial.println("Setting haptic motor values:");
     }
-    delay(4000);
+    
+    // for (uint8_t i = 0; i < hapticMotorCount; i++) {
+    //     unsigned long currTime = millis();
+    //     if (currTime - prevTime >= interval) {
+    //         prevTime = currTime;
+    //         hapticMotorPWMVals[i] = map(hapticMotorIntensities[i], 0, 255, 0, 4095);
+    //         pwm1.setPWM(1, 0, hapticMotorPWMVals[i]);
+    //         Serial.println("Setting haptic motor values:");
+    //     }
+    // }
 }
