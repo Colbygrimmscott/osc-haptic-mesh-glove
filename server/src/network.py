@@ -5,14 +5,28 @@ from typing import List, Any
 
 from src.haptics_engine import HapticsEngine
 
+class GloveDatagramProtocol(asyncio.DatagramProtocol):
+    def __init__(self, data_received_callback):
+        self.data_received_callback = data_received_callback
+        self.transport = None
+
+    def connection_made(self, transport):
+        self.transport = transport
+    
+    def datagram_received(self, data, addr):
+        self.data_received_callback(data, addr)
+
+
 class GloveUDPSender:
-    def __init__(self, glove_ip: str, port: int, haptics_engine: HapticsEngine):
+    def __init__(self, glove_ip: str, local_ip: str, port_in: int, port_out: int, haptics_engine: HapticsEngine):
         self.glove_ip = glove_ip
-        self.port = port
+        self.local_ip = local_ip
+        self.port_in = port_in
+        self.port_out = port_out
         self.haptics_engine = haptics_engine
 
-        #self.sock = None
         self.transport = None
+        self.protocol = None
 
     def _pack_motor_controls(self):
         motor_PWM_values = self.haptics_engine._get_values()
@@ -30,15 +44,20 @@ class GloveUDPSender:
             
 
     def _handle_data(self, data, address):
-        print(f"Received {len(data)} bytes from {address}.")
+        incoming_packet_format = '<3H3B'
+        incoming_packet_data = struct.unpack(incoming_packet_format, data)
 
-    async def _start_udp_server(self, event_loop):
-        self.transport, _ = await event_loop.create_datagram_endpoint(asyncio.DatagramProtocol, remote_addr = (self.glove_ip, self.port))
+
+        print(f"Received {len(data)} bytes from {address}.")
+        print(incoming_packet_data)
+
+    async def _start_udp_server(self, event_loop):        
+        self.transport, self.protocol = await event_loop.create_datagram_endpoint(lambda: GloveDatagramProtocol(self._handle_data), local_addr = (self.local_ip, self.port_in))
 
         try:
             while True:
                 packed_data = self._pack_motor_controls()
-                self.transport.sendto(packed_data)
+                self.transport.sendto(packed_data, (self.glove_ip, self.port_out))
 
                 await asyncio.sleep(0.02)
 
