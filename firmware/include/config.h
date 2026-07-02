@@ -20,9 +20,9 @@ constexpr int PWM_ADDR_2 = 0x41;
 
 
 // Define pinout for joystick and buttons
-const uint8_t PIN_JOYSTICK_X = 4;
-const uint8_t PIN_JOYSTICK_Y = 5;
-const uint8_t PIN_JOYSTICK_BTN = 6;
-const uint8_t PIN_BTN_A = 7;
-const uint8_t PIN_BTN_B = 8;
+const uint8_t PIN_JOYSTICK_X = 1;
+const uint8_t PIN_JOYSTICK_Y = 2;
+const uint8_t PIN_JOYSTICK_BTN = 4;
+const uint8_t PIN_BTN_A = 6;
+const uint8_t PIN_BTN_B = 7;
 
