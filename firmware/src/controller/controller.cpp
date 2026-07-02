@@ -19,7 +19,7 @@ void gloveController::initializePins() {
 void gloveController::getControllerVals(GloveControlPacket &packet) {
     packet.joyStickXVal = analogRead(joyStickXPin);
     packet.joyStickYVal = analogRead(joyStickYPin);
-    packet.joyStickButtonVal = digitalRead(joyStickButtonPin);
-    packet.buttonAVal = digitalRead(buttonAPin);
-    packet.buttonBVal = digitalRead(buttonBPin);
+    packet.joyStickButtonVal = !digitalRead(joyStickButtonPin);
+    packet.buttonAVal = !digitalRead(buttonAPin);
+    packet.buttonBVal = !digitalRead(buttonBPin);
 }
