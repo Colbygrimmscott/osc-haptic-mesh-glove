@@ -1,8 +1,10 @@
 # config.py
 
 # Network configuration
-DESKTOP_IP = "127.0.0.1"
+LOCAL_IP = "127.0.0.1"
+DESKTOP_IP = "0.0.0.0"
 VR_CHAT_PORT_IN = 9000
 VR_CHAT_PORT_OUT = 9001
 GLOVE_IP = "192.168.4.48"
 GLOVE_PORT = 4242
+LOCAL_PORT = 4243
