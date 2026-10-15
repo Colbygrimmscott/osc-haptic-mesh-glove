@@ -44,13 +44,15 @@ class VRCHATOSCBridge:
         self.haptics_engine._set_values(osc_arguments)
         print("Haptic info being transmitted")
 
-    def _send_joystick_data(self, x_val: float, y_val: float):
+    def _send_joystick_data(self, x_val: float, y_val: float, but: int):
         """
         Sends joystick data through OSC to VRChat.
         Vertical/Horizontal movement are mapped from -1 to 1.
         """
         self.client.send_message("/input/Vertical", y_val)
         self.client.send_message("/input/Horizontal", x_val)
+        self.client.send_message("/input/Run", but)
+
         #TO-DO : Additional function for joystick button
 
     async def _start_osc_server(self, event_loop):

@@ -6,7 +6,6 @@ from typing import List, Any
 import asyncio
 
 from src.config import *
-import test_vrc_sim
 from src.osc_handler import VRCHATOSCBridge
 from src.haptics_engine import HapticsEngine
 from src.network import GloveUDPSender
@@ -26,17 +25,22 @@ async def main():
 
     print()
 
-    while True:
-        await asyncio.sleep(1)
-        osc_bridge._send_joystick_data(0.5, 0.5)
-        await asyncio.sleep(1)
-        osc_bridge._send_joystick_data(-0.5, 0.5)
-        await asyncio.sleep(1)
-        osc_bridge._send_joystick_data(-0.5, -0.5)
-        await asyncio.sleep(1)
-        osc_bridge._send_joystick_data(0.5, -0.5)
-        await asyncio.sleep(1)
-        osc_bridge._send_joystick_data(0.0, 0.0)
+    try:
+        while True:
+            await asyncio.sleep(0.02)
+
+            controller_input_data = glove_udp_sender.inputs
+
+            vrchat_normalized_x = (controller_input_data["joy_x"] - 2048) / 2048.0
+            vrchat_normalized_y = (controller_input_data["joy_y"] - 2048) / 2048.0
+
+            osc_bridge._send_joystick_data(vrchat_normalized_x, vrchat_normalized_y, controller_input_data["joy_btn"])
+
+    except KeyboardInterrupt:
+        print("Shutting down server..")
+    finally:
+        glove_udp_task.cancel()
+        await asyncio.gather(glove_udp_task, return_exceptions=True)
 
     #test_vrc_sim.run_simulator()
 

@@ -25,6 +25,14 @@ class GloveUDPSender:
         self.port_out = port_out
         self.haptics_engine = haptics_engine
 
+        self.inputs = {
+            "joy_x": 0,
+            "joy_y": 0,
+            "joy_btn": 0,
+            "btn_a": 0,
+            "btn_b": 0
+        }
+
         self.transport = None
         self.protocol = None
 
@@ -33,19 +41,17 @@ class GloveUDPSender:
 
         packet_format = "<h" + 30 * "B"
 
-        return struct.pack(packet_format, 0x03BF, *[int(val) for val in motor_PWM_values])
-
-
-    def _receive_data(self):
-        #Maybe remove the while loop here and put it in main?
-        while True:
-            data, address = self.sock.recvfrom(4096)
-            self._handle_data(data, address)
-            
+        return struct.pack(packet_format, 0x03BF, *[int(val) for val in motor_PWM_values])         
 
     def _handle_data(self, data, address):
         incoming_packet_format = '<3H3B'
         incoming_packet_data = struct.unpack(incoming_packet_format, data)
+
+        self.inputs["joy_x"] = incoming_packet_data[1]
+        self.inputs["joy_y"] = incoming_packet_data[2]
+        self.inputs["joy_btn"] = incoming_packet_data[3]
+        self.inputs["btn_a"] = incoming_packet_data[4]
+        self.inputs["btn_b"] = incoming_packet_data[5]
 
 
         print(f"Received {len(data)} bytes from {address}.")

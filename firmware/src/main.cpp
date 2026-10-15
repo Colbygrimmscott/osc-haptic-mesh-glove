@@ -75,16 +75,16 @@ void loop() {
 
     uint16_t hapticMotorPWMVals[hapticMotorCount];
 
-    for (uint8_t i = 0; i < hapticMotorCount; i++) {
-        unsigned long currTime = millis();
-        while (currTime - prevTime < interval) {
-            currTime = millis();
-        }
-        prevTime = currTime;
-        hapticMotorPWMVals[i] = map(hapticMotorIntensities[i], 0, 255, 0, 4095);
-        pwm1.setPWM(1, 0, hapticMotorPWMVals[i]);
-        Serial.println("Setting haptic motor values:");
-    }
+    // for (uint8_t i = 0; i < hapticMotorCount; i++) {
+    //     unsigned long currTime = millis();
+    //     while (currTime - prevTime < interval) {
+    //         currTime = millis();
+    //     }
+    //     prevTime = currTime;
+    //     hapticMotorPWMVals[i] = map(hapticMotorIntensities[i], 0, 255, 0, 4095);
+    //     pwm1.setPWM(1, 0, hapticMotorPWMVals[i]);
+    //     Serial.println("Setting haptic motor values:");
+    // }
     
     // for (uint8_t i = 0; i < hapticMotorCount; i++) {
     //     unsigned long currTime = millis();
